@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -121,4 +123,31 @@ public class JavaQuestionServiceTest {
         assertEquals(4, javaQuestionService.getSize());
     }
 
+    @Test
+     void validateInput() {
+         try {
+             Method method = JavaQuestionService.class.getDeclaredMethod("validateInput", String.class);
+             method.setAccessible(true);
+             method.invoke(javaQuestionService, (Object) null);
+         } catch (IllegalAccessException | NoSuchMethodException e) {
+             e.printStackTrace();
+             throw new RuntimeException(e);
+         } catch (InvocationTargetException e) {
+             assertEquals(ResponseStatusException.class, e.getCause().getClass());
+         }
+     }
+
+     @Test
+     void validateQuestion() {
+         try {
+             Method method = JavaQuestionService.class.getDeclaredMethod("validateQuestion", Question.class);
+             method.setAccessible(true);
+             method.invoke(javaQuestionService, (Object) null);
+         } catch (IllegalAccessException | NoSuchMethodException e) {
+             e.printStackTrace();
+             throw new RuntimeException(e);
+         } catch (InvocationTargetException e) {
+             assertEquals(ResponseStatusException.class, e.getCause().getClass());
+         }
+     }
 }
